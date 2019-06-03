@@ -16,9 +16,33 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Add Posts
+router.post('/', async (req, res) => {
+  const postObject = {
+    'description': req.body.description,
+    'createdAt': new Date(),
+  };
+
+  try {
+    await addPostToCollection(postObject);
+    res.status(201).send(postObject);
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send();
+    res.end('An error has occurred!');
+  }
+});
+
 async function loadPostsCollection() {
   const client = await new MongoClient(mongoDbUriString, { useNewUrlParser: true }).connect();
   return client.db('blog-app').collection('posts');
+}
+
+async function addPostToCollection(post) {
+  const client = await loadPostsCollection();
+  await client.insertOne(post, async (err, result) => {
+    if (err) console.log(err.message);
+  });
 }
 
 
