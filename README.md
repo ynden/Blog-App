@@ -7,16 +7,31 @@ We have three components here :
 2. The database
 3. The front-end
 
+___
+
 ### The API
 The API is public, so no authentication.
 The routes and the API are made with Express.
+
+``` 
+List posts: [GET] => /api/posts 
+```
+
+```
+Add a posts: [POST] => /api/posts
+```
+
+```
+Delete a post: [GET] => /api/posts/<postId>
+```
+___
 
 ### Database
 The database used is a NoSQL database with MongoDB.
 
 ### Front-end
 For the last part, I will use Vuejs.
-
+___
 ## Tasks
 * [~] Back-end
   * [~] API
