@@ -33,6 +33,19 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Delete Posts
+router.get('/delete/:postId', async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    const deleting = await deletePost(postId);
+    res.status(201).send('Deleted successfully!');
+  } catch (error) {
+    res.status(401).send(error.message);
+    res.end();
+  }
+});
+
 async function loadPostsCollection() {
   const client = await new MongoClient(mongoDbUriString, { useNewUrlParser: true }).connect();
   return client.db('blog-app').collection('posts');
@@ -41,6 +54,14 @@ async function loadPostsCollection() {
 async function addPostToCollection(post) {
   const client = await loadPostsCollection();
   await client.insertOne(post, async (err, result) => {
+    if (err) console.log(err.message);
+  });
+}
+
+async function deletePost(postId) {
+  const client = await loadPostsCollection();
+
+  client.deleteMany({ '_id': ObjectID(postId) }, (err, res) => {
     if (err) console.log(err.message);
   });
 }
